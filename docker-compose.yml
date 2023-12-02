@@ -1,0 +1,47 @@
+version: "3.9"
+
+services: 
+  rabbitmq:
+    image: rabbitmq:3
+    hostname: "rabbitmq"
+    labels:
+      NAME: "rabbitmq"
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  postgres:
+    image: postgres  
+    ports:
+    - 5432:5432
+    user: 1000:1000
+    environment:
+      POSTGRES_USER: nmhpostgreuser
+      POSTGRES_PASSWORD: nmhpostgrepassword
+      POSTGRES_DB: nmh-db
+
+  publisher:
+    image: publisher:latest
+    ports:
+      - 3001:3001
+    depends_on:
+      - rabbitmq
+      - postgres
+    environment:
+      - RabbitMqSection:HostName=rabbitmq
+      - RabbitMqSection:Port=5672
+      - RabbitMqSection:Queue=windpark
+      - RabbitMqSection:RoutingKey=windpark
+      - ConnectionStrings:postgreSqlConnection=Host=postgres; Database=nmh-db; Username=nmhpostgreuser; Password=nmhpostgrepassword; Port=5432; Pooling=true
+      - CachingConfiguration:CacheExpirationInHours=1
+      - Logging:LogLevel:Default=Debug
+      - Logging:LogLevel:System=Information
+      - Logging:LogLevel:Microsoft=Information
+    logging:
+      driver: json-file
+      options:
+        max-file: 5
+        max-size: 100m
+        mode: non-blocking
+
+    
