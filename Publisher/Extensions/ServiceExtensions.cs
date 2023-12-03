@@ -1,5 +1,4 @@
-﻿using Contracts;
-using Contracts.Configuration;
+﻿using Contracts.Configuration;
 using Messaging;
 using Publisher.ActionFilters;
 using Publisher.Core;
@@ -29,7 +28,7 @@ public static class ServiceExtensions
 
         builder.Services.AddHostedService<RabbitMqReceiverServiceHost>();
 
-        builder.Services.AddSingleton<IComputer, Computer>();
+        builder.Services.AddSingleton<IDataProcessor, DataProcessor>();
         builder.Services.AddSingleton<ISchedulerProvider, SchedulerProvider>();
         builder.Services.AddSingleton<ICacheProvider, CacheProvider>();
         builder.Services.AddSingleton<IMessageProducer, MessageProducer>();

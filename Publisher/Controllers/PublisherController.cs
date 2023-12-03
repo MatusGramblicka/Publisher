@@ -12,13 +12,13 @@ namespace Publisher.Controllers;
 public class PublisherController : Controller
 {
     private readonly ILogger<PublisherController> _logger;
-    private readonly IComputer _computer;
+    private readonly IDataProcessor _dataProcessor;
     private readonly IMapper _mapper;
 
-    public PublisherController(ILogger<PublisherController> logger, IComputer computer, IMapper mapper)
+    public PublisherController(ILogger<PublisherController> logger, IDataProcessor dataProcessor, IMapper mapper)
     {
         _logger = logger;
-        _computer = computer;
+        _dataProcessor = dataProcessor;
         _mapper = mapper;
     }
 
@@ -32,7 +32,7 @@ public class PublisherController : Controller
 
         _logger.LogInformation($"Request received with key {key}");
 
-        var computedOutputDto = await _computer.Compute(key, calculationInput.Input);
+        var computedOutputDto = await _dataProcessor.ProcessData(key, calculationInput.Input);
 
         return Ok(computedOutputDto);
     }
