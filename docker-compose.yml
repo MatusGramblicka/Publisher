@@ -13,7 +13,7 @@ services:
   postgres:
     image: postgres  
     ports:
-    - 5432:5432
+      - 5432:5432
     user: 1000:1000
     environment:
       POSTGRES_USER: nmhpostgreuser
