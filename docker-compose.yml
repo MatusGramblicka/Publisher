@@ -19,11 +19,13 @@ services:
       POSTGRES_USER: nmhpostgreuser
       POSTGRES_PASSWORD: nmhpostgrepassword
       POSTGRES_DB: nmh-db
+    volumes:
+    - type: bind
+      source: /publisher_data/postgres
+      target: /var/lib/postgresql/data
 
   publisher:
-    image: publisher:latest
-    ports:
-      - 3001:3001
+    image: publisher:latest    
     depends_on:
       - rabbitmq
       - postgres

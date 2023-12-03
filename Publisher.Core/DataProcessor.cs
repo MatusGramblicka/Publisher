@@ -10,10 +10,9 @@ using Publisher.Interface;
 
 namespace Publisher.Core;
 
-public class Computer : CacheProvider, IComputer
+public class DataProcessor : CacheProvider, IDataProcessor
 {
-
-    private readonly ILogger<Computer> _logger;
+    private readonly ILogger<DataProcessor> _logger;
     private readonly IMessageProducer _messageProducer;
     private readonly ITimeHelper _timeHelper;
     private readonly IMapper _mapper;
@@ -26,8 +25,8 @@ public class Computer : CacheProvider, IComputer
     private double? _computedValue;
     private double? _previousValue;
 
-    public Computer(IMemoryCache memoryCache,
-        ILogger<Computer> logger, IOptions<CachingConfiguration> cachingConfiguration,
+    public DataProcessor(IMemoryCache memoryCache,
+        ILogger<DataProcessor> logger, IOptions<CachingConfiguration> cachingConfiguration,
         IMessageProducer messageProducer, ITimeHelper timeHelper, IMapper mapper) : base(
         memoryCache, cachingConfiguration)
     {
@@ -38,7 +37,7 @@ public class Computer : CacheProvider, IComputer
         _mapper = mapper;
     }
 
-    public async Task<ComputedOutputDto> Compute(int key, decimal input)
+    public async Task<ComputedOutputDto> ProcessData(int key, decimal input)
     {
         _computedValue = null;
         _previousValue = null;
@@ -49,7 +48,7 @@ public class Computer : CacheProvider, IComputer
         {
             _logger.LogInformation("Key/Value found in cache");
             var seconds = _timeHelper.GetSecondsDifferenceFromNow(objectForCache.DateCreated);
-            _logger.LogInformation($"Key/Value pair is {seconds} seconds old");
+            _logger.LogDebug($"Key/Value pair is {seconds} seconds old");
 
             _previousValue = objectForCache.StorageValue;
 
@@ -70,7 +69,7 @@ public class Computer : CacheProvider, IComputer
             await SetKeyValueToCache(key, StorageValueConst);
         }
 
-        _logger.LogInformation($"computedValue {_computedValue}, input {input}, previousValue {_previousValue}");
+        _logger.LogDebug($"computedValue {_computedValue}, input {input}, previousValue {_previousValue}");
 
         var computedOutput = new ComputedOutput
         {
