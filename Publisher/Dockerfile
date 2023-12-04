@@ -5,5 +5,5 @@ WORKDIR /App
 
 ENV ASPNETCORE_ENVIRONMENT Production
 EXPOSE 3001 
-   
+#todo healthcheck and curl install   
 ENTRYPOINT ["dotnet", "Publisher.dll", "--urls", "http://*:3001"] 
