@@ -38,3 +38,6 @@ Program.cs zaregistrujte
 • pre vytvorenú konfiguráciu vytvorte migráciu, ktorá zmeny premietne do DB; migrácia sa má 
 aplikovať automaticky po spustení aplikácie
 • samotná funkcionalita (CRUD) nad DB modelom nie je vyžadovaná
+
+todo 
+▪ add RabbitMq and PostreSql healthchecks
